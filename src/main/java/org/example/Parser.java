@@ -5,8 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
 
-import static java.util.Collections.replaceAll;
-
 
 public class Parser {
     URLGetter url;
@@ -34,7 +32,7 @@ public class Parser {
      * @param song to parse
      */
     Parser(String song) {
-        getLyrics(song);
+        getLyricsURL(song);
     }
 
 //    /**
@@ -64,7 +62,7 @@ public class Parser {
         updateURL();
     }
 
-    public void getLyrics(String song) {
+    public void getLyricsURL(String song) {
         String url = azlyrics + song + ".html";
         this.url = new URLGetter(url);
         updateURL();
@@ -150,48 +148,42 @@ public class Parser {
 
 
 
-    public HashMap<String, String>[] getLyrics(ArrayList<String>[] songs) {
-        // go to azlyrics and scrap lyrics, put into hashmap where
+    public HashMap<String, String> getLyricsForYear(ArrayList<String> songs) {
+        // go to azlyrics and scrap lyrics given a list of songs for a particular year, put into hashmap where
         // key: name, value: lyrics
         // return array of hashmaps where each hash is an spot in array
-        @SuppressWarnings("unchecked")
-        HashMap<String, String>[] lyricsByYear = new HashMap[15];
+        HashMap<String, String> lyrics = new HashMap<>();
 
-        while (year < 2025) {
-            ArrayList<String> currYearSongs = songs[year - 2010];
-            HashMap<String, String> lyricsThisYear = new HashMap<>();
-
-            for (String currYearSong : currYearSongs) {
-                try {
-                    Thread.sleep(1500); // 1.5 seconds between requests
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    getLyrics(currYearSong); // move new url
-                    System.out.println("url: " + this.url.getURL());
-                } catch (RuntimeException e) {
-                    System.out.println("Error: unable to get lyrics for " + currYearSong + ": " + e.getMessage());
-                    continue;
-                }
-
-                newExpression("<b>(\".*?\")</b><br>.*?that. -->\\s*(.*?)</div>");
-
-                if (m.find()) {
-                    String currSong = m.group(1);
-                    String currLyrics = m.group(2).replaceAll("<br>", "");
-                    currLyrics = currLyrics.replaceAll("<i>.*?</i>", "");
-                    currLyrics = currLyrics.replaceAll("&quot;", "\"");
-
-                    lyricsThisYear.put(currSong, currLyrics);
-                } else {
-                    System.out.println("Error: no lyrics matched for year " + year);
-                }
+        for (String song : songs) {
+            if (song.equals("kesha/tiktok")) {
+                song = "keha/tiktok";
             }
-            lyricsByYear[year - 2010] = lyricsThisYear;
-            year++;
+            try {
+                Thread.sleep(1500); // 1.5 seconds between requests
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                getLyricsURL(song); // move new url
+                System.out.println("url: " + this.url.getURL());
+            } catch (RuntimeException e) {
+                System.out.println("Error: unable to get lyrics for " + song + ": " + e.getMessage());
+                continue;
+            }
+
+            newExpression("that. -->\\s*(.*?)</div>");
+
+            if (m.find()) {
+                String currLyrics = m.group(1).replaceAll("<br>", " ");
+                currLyrics = currLyrics.replaceAll("<i>.*?</i>", "");
+                currLyrics = currLyrics.replaceAll("&quot;", "\"");
+
+                lyrics.put(song, currLyrics);
+            } else {
+                System.out.println("Error: no lyrics matched for year " + year);
+            }
         }
-        return lyricsByYear;
+        return lyrics;
     }
 
         // ======================================================

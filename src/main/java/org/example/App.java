@@ -23,16 +23,10 @@ public class App
         ArrayList<String>[] songUrls = songGetter.getSongs();
         Parser lyricGetter = new Parser(2010);
 
-        HashMap<String, String>[] lyrics = lyricGetter.getLyrics(songUrls);
-
-        System.out.println(Arrays.toString(lyrics));
-
-        Parser p = new Parser("https://www.azlyrics.com/lyrics/ladyantebellum/needyounow.html");
-
-        int year = 2016;
-
-        ArrayList<String>[] songs = songUrls;
-        HashMap<String, String> lyricsMap = parser.getLyricsForYear(year, songs);
+        int year = 2010;
+        HashMap<String, String> lyricsMap = lyricGetter.getLyricsForYear(songUrls[year - 2010]);
+        // have lyrics in hashmap format, song, format
+        System.out.println(lyricsMap);
 
         File file = new File("lyrics.csv");
         boolean fileExists = file.exists(); // check if CSV already exists
