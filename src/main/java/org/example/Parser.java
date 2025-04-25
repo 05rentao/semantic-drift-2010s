@@ -16,6 +16,7 @@ public class Parser {
     // https://www.azlyrics.com/lyrics/metroboomin/creepin.html
     static final String wiki = "https://en.wikipedia.org/wiki/Billboard_Year-End_Hot_100_singles_of_";
     // https://en.wikipedia.org/wiki/Billboard_Year-End_Hot_100_singles_of_2023
+    public static HashMap<String, String> outliersURLS = new HashMap<>();
 
     /**
      * Init for finding parser object finding song titles from wiki
@@ -43,6 +44,18 @@ public class Parser {
 //        this.url = new URLGetter(url);
 //        updateURL();
 //    }
+
+    public static void updateOutliers() {
+        outliersURLS.put("kesha/tiktok", "keha/tiktok");
+        outliersURLS.put("ceelogreen/fuckyouforgetyou", "ceelogreen/forgetyou");
+        outliersURLS.put("theblackeyedpeas/justcantgetenough",
+                "blackeyedpeas/justcantgetenough");
+        outliersURLS.put("thewanted/gladyoucame", "wanted/gladyoucame");
+        outliersURLS.put("kellyclarkson/strongerwhatdoesntkillyou",
+                "kellyclarkson/whatdoesntkillyoustronger");
+        outliersURLS.put("macklemoreampryanlewis/cantholdus", "macklemore/cantholdus");
+        outliersURLS.put("macklemoreampryanlewis/thriftshop", "macklemore/thriftshop");
+    }
 
     public void updateURL() {
         this.url.printStatusCode();
@@ -120,6 +133,7 @@ public class Parser {
                     String currSong = m.group(1).toLowerCase().replaceAll("[^a-z0-9]", "");
                     // System.out.println(m.group(1));
                     String currArtist = m.group(2).toLowerCase().replaceAll("[^a-z0-9]", "");
+                    currArtist = currArtist.replaceAll("^the", "");
                     String urlComponent = currArtist + "/" + currSong;
                     songsThisYear.add(urlComponent);
                 } else {
@@ -148,6 +162,7 @@ public class Parser {
 
 
 
+
     public HashMap<String, String> getLyricsForYear(ArrayList<String> songs) {
         // go to azlyrics and scrap lyrics given a list of songs for a particular year, put into hashmap where
         // key: name, value: lyrics
@@ -155,8 +170,8 @@ public class Parser {
         HashMap<String, String> lyrics = new HashMap<>();
 
         for (String song : songs) {
-            if (song.equals("kesha/tiktok")) {
-                song = "keha/tiktok";
+            if (outliersURLS.containsKey(song)) {
+                song = outliersURLS.get(song);
             }
             try {
                 Thread.sleep(1500); // 1.5 seconds between requests
