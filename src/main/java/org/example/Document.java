@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
-
+import java.util.HashSet;
 /**
  * This class represents one document.
  * It will keep track of the term frequencies.
@@ -48,6 +48,15 @@ public class Document implements Comparable<Document> {
 	 */
 	private void readFileAndPreProcess() {
 		try {
+			// added step to remove stop words
+			Scanner stopwordScanner = new Scanner(new File("stopwords.txt"));
+			HashSet<String> stopWords = new HashSet<>();
+
+			while (stopwordScanner.hasNext()) {
+				stopWords.add(stopwordScanner.next().toLowerCase());
+			}
+			stopwordScanner.close();
+
 			Scanner in = new Scanner(new File(filename));
 			System.out.println("Reading file: " + filename + " and preprocessing");
 			
@@ -55,8 +64,10 @@ public class Document implements Comparable<Document> {
 				String nextWord = in.next();
 				
 				String filteredWord = nextWord.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-				
-				if (!(filteredWord.equalsIgnoreCase(""))) {
+
+				if (!(filteredWord.equalsIgnoreCase(""))
+						&& !stopWords.contains(filteredWord)) { // check stop words
+
 					if (termFrequency.containsKey(filteredWord)) {
 						int oldCount = termFrequency.get(filteredWord);
 						termFrequency.put(filteredWord, ++oldCount);
