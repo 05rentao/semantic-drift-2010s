@@ -5,9 +5,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class App {
+public class LyricFetcher {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
 
         // Initialize parsers and song URLs
         Parser songGetter = new Parser(2010);

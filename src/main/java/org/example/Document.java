@@ -24,7 +24,34 @@ public class Document implements Comparable<Document> {
 	 * The name of the file to read.
 	 */
 	private String filename;
-	
+
+	private String year;
+	private String artist;
+	private String songTitle;
+
+
+	public Document(String filepath, String year, String artist, String songTitle) {
+		this.filename = filepath;
+		this.year = year;
+		this.artist = artist;
+		this.songTitle = songTitle;
+		termFrequency = new HashMap<>();
+		readFileAndPreProcess();
+	}
+
+	// Getter methods
+	public String getYear() {
+		return year;
+	}
+
+	public String getArtist() {
+		return artist;
+	}
+
+	public String getSongTitle() {
+		return songTitle;
+	}
+
 	/**
 	 * The constructor.
 	 * It takes in the name of a file to read.
@@ -49,7 +76,7 @@ public class Document implements Comparable<Document> {
 	private void readFileAndPreProcess() {
 		try {
 			// added step to remove stop words
-			Scanner stopwordScanner = new Scanner(new File("stopwords.txt"));
+			Scanner stopwordScanner = new Scanner(new File("data/stopwords.txt"));
 			HashSet<String> stopWords = new HashSet<>();
 
 			while (stopwordScanner.hasNext()) {

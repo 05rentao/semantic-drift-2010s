@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,7 +41,7 @@ public class VectorSpaceModel {
 	 * This creates the tf-idf vectors.
 	 */
 	private void createTfIdfWeights() {
-		System.out.println("Creating the tf-idf weight                                         vectors");
+		System.out.println("Creating the tf-idf weight vectors");
 		Set<String> terms = corpus.getInvertedIndex().keySet();
 		
 		for (Document document : corpus.getDocuments()) {
@@ -101,5 +102,9 @@ public class VectorSpaceModel {
 	 */
 	public double cosineSimilarity(Document d1, Document d2) {
 		return getDotProduct(d1, d2) / (getMagnitude(d1) * getMagnitude(d2));
+	}
+
+	public HashMap<String, Double> getTfIdfWeights(Document doc) {
+		return tfIdfWeights.get(doc);
 	}
 }
