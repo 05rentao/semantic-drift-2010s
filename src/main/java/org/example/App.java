@@ -24,7 +24,7 @@ public class App {
         HashMap<String, String> lyricsMap = lyricGetter.getLyricsForYear(songUrls[year - 2010]);
         System.out.println(lyricsMap);
 
-        File csvFile = new File("lyrics.csv");
+        File csvFile = new File("lyricsRaw.csv");
         Set<String> existingKeys = readExistingKeys(csvFile);
         appendLyricsToCsv(csvFile, lyricsMap, existingKeys, year);
     }
@@ -95,7 +95,7 @@ public class App {
                 added++;
             }
 
-            System.out.println("✅ Added " + added + " new songs from " + year + " to lyrics.csv");
+            System.out.println("✅ Added " + added + " new songs from " + year + " to lyricsRaw.csv");
         } catch (IOException e) {
             System.out.println("❌ Error writing to CSV: " + e.getMessage());
         }
