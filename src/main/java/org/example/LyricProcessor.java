@@ -9,8 +9,7 @@ public class LyricProcessor {
 
     public static void main(String[] args) {
         // preprocessLyrics();
-        createFilesFromLyrics();
-
+        // createFilesFromLyrics();
     }
 
     private static void preprocessLyrics() {
