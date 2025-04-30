@@ -93,9 +93,9 @@ public class LyricFetcher {
                 added++;
             }
 
-            System.out.println("✅ Added " + added + " new songs from " + year + " to lyricsRaw.csv");
+            System.out.println("Added " + added + " new songs from " + year + " to lyricsRaw.csv");
         } catch (IOException e) {
-            System.out.println("❌ Error writing to CSV: " + e.getMessage());
+            System.out.println("Error writing to CSV: " + e.getMessage());
         }
     }
 }

@@ -21,7 +21,7 @@ public class LyricProcessor {
             // 2. Open lyrics.csv (both reading and then writing)
             File inputFile = new File("data/lyricsRaw.csv");
             File tempFile = new File("data/lyrics_temp.csv"); // temporary file
-            File outputFile = new File("data/lyrics.csv"); // final output file
+            File outputFile = new File("data/lyrics.csv");
 
             try (CSVReader reader = new CSVReader(new FileReader(inputFile));
                  CSVWriter writer = new CSVWriter(new FileWriter(tempFile))) {
