@@ -50,9 +50,7 @@ public class VSMBuilder {
         return new Corpus(documents);
     }
 
-    /**
-     * Helper: Recursively list all .txt files
-     */
+    // Helper: list all .txt files
     private static List<File> listAllSongFiles(File folder) {
         List<File> songFiles = new ArrayList<>();
         File[] files = folder.listFiles();
@@ -72,17 +70,17 @@ public class VSMBuilder {
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(outputCsvPath))) {
 
-            // Step 1: Get full sorted list of terms
+            // get full sorted list of terms
             Set<String> termSet = corpus.getInvertedIndex().keySet();
             ArrayList<String> termList = new ArrayList<>(termSet);
             Collections.sort(termList); // important for consistent column order
 
-            // Step 2: Write CSV header
+            // write CSV header
             List<String> header = new ArrayList<>(Arrays.asList("year", "artist", "song"));
             header.addAll(termList);
             writer.writeNext(header.toArray(new String[0]));
 
-            // Step 3: For each document, write metadata + vector
+            // write metadata + vector for each document(song)
             for (Document doc : corpus.getDocuments()) {
                 List<String> row = new ArrayList<>();
 
@@ -100,10 +98,10 @@ public class VSMBuilder {
                 writer.writeNext(row.toArray(new String[0]));
             }
 
-            System.out.println("✅ Saved TF-IDF vectors to " + outputCsvPath);
+            System.out.println("Saved TF-IDF vectors to " + outputCsvPath);
 
         } catch (IOException e) {
-            System.out.println("❌ Error writing TF-IDF vectors: " + e.getMessage());
+            System.out.println("Error writing vectors: " + e.getMessage());
             e.printStackTrace();
         }
     }

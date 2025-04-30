@@ -36,15 +36,6 @@ public class Parser {
         getLyricsURL(song);
     }
 
-//    /**
-//     * generic parser
-//     * @param url to parse
-//     */
-//    Parser(String url) {
-//        this.url = new URLGetter(url);
-//        updateURL();
-//    }
-
     public static void updateOutliers() {
         outliersURLS.put("kesha/tiktok", "keha/tiktok");
         outliersURLS.put("ceelogreen/fuckyouforgetyou", "ceelogreen/forgetyou");
@@ -153,20 +144,10 @@ public class Parser {
         return songsByYear;
     }
 
-
-
-
-
-
-
-
-
-
-
-    public HashMap<String, String> getLyricsForYear(ArrayList<String> songs) {
-        // go to azlyrics and scrap lyrics given a list of songs for a particular year, put into hashmap where
+    public HashMap<String, String> getLyricsForYears(ArrayList<String> songs) {
+        // go to azlyrics and scrap lyrics given a list of songs for a particular year, put into hashmap
         // key: name, value: lyrics
-        // return array of hashmaps where each hash is an spot in array
+        // return array of hashmaps where each hash is a spot in array
         HashMap<String, String> lyrics = new HashMap<>();
 
         for (String song : songs) {
@@ -200,7 +181,5 @@ public class Parser {
         }
         return lyrics;
     }
-
-        // ======================================================
 
 }

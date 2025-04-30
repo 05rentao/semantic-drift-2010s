@@ -10,6 +10,7 @@ public class LyricProcessor {
     public static void main(String[] args) {
         // preprocessLyrics();
         // createFilesFromLyrics();
+        LyricCleaner.remove1LetterWords();
     }
 
     private static void preprocessLyrics() {
@@ -31,7 +32,7 @@ public class LyricProcessor {
                 for (int i = 0; i < allRows.size(); i++) {
                     String[] row = allRows.get(i);
                     if (isHeader) {
-                        // Copy header exactly
+                        // copy header
                         writer.writeNext(row);
                         isHeader = false;
                         continue;
@@ -54,13 +55,13 @@ public class LyricProcessor {
             // Replace original file
             if (outputFile.delete()) {
                 tempFile.renameTo(outputFile);
-                System.out.println("✅ Cleaned lyrics written into lyrics.csv");
+                System.out.println("Cleaned lyrics written into lyrics.csv");
             } else {
-                System.out.println("❌ Could not replace original file!");
+                System.out.println("Could not replace original file");
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -93,17 +94,16 @@ public class LyricProcessor {
                         continue;
                     }
 
-                    // Clean filename (remove illegal characters)
+                    // clean filename (remove illegal characters)
                     String filename = artist + "_" + song;
                     filename = filename.replaceAll("[^a-zA-Z0-9\\-_]", "").toLowerCase();
 
-                    // Build folder path
+                    // build folder path
                     File yearFolder = new File("data/songs/" + year);
                     if (!yearFolder.exists()) {
                         yearFolder.mkdirs();
                     }
 
-                    // Write to a new file
                     File outputFile = new File(yearFolder, filename + ".txt");
 
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
@@ -111,11 +111,11 @@ public class LyricProcessor {
                     }
                 }
 
-                System.out.println("✅ Lyrics split into separate files under data/songs/");
+                System.out.println("successfully created txt for each song, saved under data/songs/");
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

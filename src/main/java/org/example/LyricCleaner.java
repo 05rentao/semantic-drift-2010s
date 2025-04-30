@@ -1,5 +1,8 @@
 package org.example;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+
 import java.io.*;
 import java.util.*;
 
@@ -39,15 +42,53 @@ public class LyricCleaner {
                 .orElse("");
     }
 
-//        String lyrics = "work work work work   learn learn learn";
-//        // (1) lowercase + strip punctuation
-//        lyrics = lyrics.toLowerCase().replaceAll("[^a-z0-9\\s']", " ");
-//        lyrics = lyrics.replaceAll("\\s+", " ").trim();
-//
-//        // (2) collapse repeats
-//        lyrics = lyrics.replaceAll("\\b(\\w+)(?:\\s+\\1\\b)+", "$1")
-//        lyrics = lyrics.replaceAll("\\b(\\w+)(?:\\s+\\1\\b)+", "$1"); // Remove repeated words
-//        lyrics = lyrics.replaceAll("\\s+", " ").trim();
-//
-//        System.out.println(lyrics);  // -> "work learn"
+    public static void remove1LetterWords() {
+        File inputFile = new File("data/vectors.csv");
+        File outputFile = new File("data/vectors_filtered.csv");
+
+        try (CSVReader reader = new CSVReader(new FileReader(inputFile));
+             CSVWriter writer = new CSVWriter(new FileWriter(outputFile))) {
+
+            // Read the first row (header)
+            String[] header = reader.readNext();
+
+            if (header != null) {
+                // Identify columns to keep (where words are not 1 letter long)
+                List<Integer> columnsToKeep = new ArrayList<>();
+                for (int i = 0; i < header.length; i++) {
+                    String column = header[i];
+                    List<String> words = Arrays.asList(column.split("\\s+"));
+                    boolean hasOneLetterWord = words.stream().anyMatch(word -> word.length() == 1);
+                    if (!hasOneLetterWord) {
+                        columnsToKeep.add(i);
+                    }
+                }
+
+                // Write filtered header
+                List<String> filteredHeader = new ArrayList<>();
+                for (int index : columnsToKeep) {
+                    filteredHeader.add(header[index]);
+                }
+                writer.writeNext(filteredHeader.toArray(new String[0]));
+
+                // Write filtered rows
+                String[] row;
+                while ((row = reader.readNext()) != null) {
+                    List<String> filteredRow = new ArrayList<>();
+                    for (int index : columnsToKeep) {
+                        filteredRow.add(row[index]);
+                    }
+                    writer.writeNext(filteredRow.toArray(new String[0]));
+                }
+
+                System.out.println("removed 1-letter word columns and saved to vectors_filtered.csv");
+            } else {
+                System.out.println("CSV file is empty or has no header.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

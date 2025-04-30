@@ -8,20 +8,18 @@ import java.util.regex.Pattern;
 public class LyricFetcher {
     public static void main(String[] args) {
 
-        // Initialize parsers and song URLs
         Parser songGetter = new Parser(2010);
         ArrayList<String>[] songUrls = songGetter.getSongs();
         Parser lyricGetter = new Parser(2010);
 
-        // Set target year
         lyricGetter.year = 2023;
         int year = lyricGetter.year;
 
         Parser.updateOutliers();
 
-        // Fetch lyrics for the specific year
-        HashMap<String, String> lyricsMap = lyricGetter.getLyricsForYear(songUrls[year - 2010]);
-        System.out.println(lyricsMap);
+        // fetch lyrics for the specific year
+        HashMap<String, String> lyricsMap = lyricGetter.getLyricsForYears(songUrls[year - 2010]);
+        // System.out.println(lyricsMap);
 
         File csvFile = new File("lyricsRaw.csv");
         Set<String> existingKeys = readExistingKeys(csvFile);
@@ -33,6 +31,7 @@ public class LyricFetcher {
      */
     private static Set<String> readExistingKeys(File file) {
         Set<String> existingKeys = new HashSet<>();
+        // to keep track of keys already added
         if (!file.exists()) {
             return existingKeys;
         }
@@ -44,8 +43,8 @@ public class LyricFetcher {
             while ((line = reader.readLine()) != null) {
                 Matcher m = csvPattern.matcher(line);
                 if (m.find()) {
-                    String yr     = m.group(1);
-                    String song   = m.group(2);
+                    String yr = m.group(1);
+                    String song = m.group(2);
                     String artist = m.group(3);
                     existingKeys.add(yr + "/" + song + "/" + artist);
                 }
