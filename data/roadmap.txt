@@ -1,6 +1,0 @@
-Average cosine distance between songs from early years vs recent years
-most similar songs from now to then,
-trends across years, are songs more hyper vs sad?
-(is there an api i can use to get happiness ranking?)
-
-
